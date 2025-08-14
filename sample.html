@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSafe - Cybersecurity Awareness</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes shield-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        
+        @keyframes code-scroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .shield-pulse {
+            animation: shield-pulse 2s ease-in-out infinite;
+        }
+        
+        .cyber-bg {
+            background-image: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(0, 150, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 150, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .hacker-terminal {
+            background-color: rgba(0,0,0,0.8);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+        }
+        
+        .terminal-cursor {
+            animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+            from, to { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        .threat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .quiz-option:hover {
+            background-color: rgba(0, 150, 255, 0.2);
+        }
+        
+        .progress-fill {
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="cyber-bg text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="flex justify-between items-center p-6 bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="text-2xl font-bold text-blue-400 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2 shield-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            CyberSafe
+        </div>
+        <div class="hidden md:flex space-x-6">
+            <a href="#learn" class="hover:text-blue-400 transition">Learn</a>
+            <a href="#quiz" class="hover:text-blue-400 transition">Quiz</a>
+            <a href="#simulation" class="hover:text-blue-400 transition">Simulation</a>
+            <a href="#stats" class="hover:text-blue-400 transition">Statistics</a>
+        </div>
+        <button class="md:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden cyber-grid min-h-screen flex items-center">
+        <div class="absolute inset-0 z-0">
+            <canvas id="matrixCanvas" class="w-full h-full opacity-20"></canvas>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10 py-20">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 mb-10 lg:mb-0">
+                    <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
+                        Protect Yourself in the <span class="text-blue-400">Digital World</span>
+                    </h1>
+                    <p class="text-xl text-gray-300 mb-8 max-w-lg">
+                        Learn how to recognize and defend against cyber threats with our interactive awareness platform.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#quiz" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition transform hover:-translate-y-1">
+                            Take the Quiz
+                        </a>
+                        <a href="#learn" class="bg-transparent border-2 border-blue-400 text-blue-400 px-8 py-3 rounded-lg font-medium transition transform hover:-translate-y-1">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2 relative">
+                    <div class="floating">
+                        <div class="hacker-terminal p-6 rounded-lg max-w-lg mx-auto">
+                            <div class="flex items-center mb-4">
+                                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                            </div>
+                            <div class="terminal-content overflow-hidden h-64">
+                                <div class="terminal-line">> Initializing security protocols...</div>
+                                <div class="terminal-line">> Scanning for vulnerabilities...</div>
+                                <div class="terminal-line">> Firewall integrity: 100%</div>
+                                <div class="terminal-line">> Threat detection active</div>
+                                <div class="terminal-line">> Network encryption enabled</div>
+                                <div class="terminal-line"> </div>
+                                <div class="terminal-line">> Welcome to <span class="text-blue-400">CyberSafe v2.0</span></div>
+                                <div class="terminal-line">> Type <span class="text-yellow-400">'help'</span> for commands</div>
+                                <div class="terminal-line"> </div>
+                                <div class="terminal-line">> <span class="terminal-cursor">_</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learn Section -->
+    <section id="learn" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16">Common Cyber Threats</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Phishing Card -->
+                <div class="threat-card bg-gray-800 rounded-xl p-6 shadow-lg transition-all cursor-pointer border-l-4 border-blue-500">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-500 p-3 rounded-lg mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold">Phishing</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Fraudulent attempts to obtain sensitive information by disguising as a trustworthy entity.
+                    </p>
+                    <div class="text-blue-400 flex items-center">
+                        Learn more
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Malware Card -->
+                <div class="threat-card bg-gray-800 rounded-xl p-6 shadow-lg transition-all cursor-pointer border-l-4 border-red-500">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-500 p-3 rounded-lg mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold">Malware</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Malicious software designed to harm or exploit any programmable device or network.
+                    </p>
+                    <div class="text-blue-400 flex items-center">
+                        Learn more
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Social Engineering Card -->
+                <div class="threat-card bg-gray-800 rounded-xl p-6 shadow-lg transition-all cursor-pointer border-l-4 border-purple-500">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-500 p-3 rounded-lg mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold">Social Engineering</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Psychological manipulation of people into performing actions or divulging confidential information.
+                    </p>
+                    <div class="text-blue-400 flex items-center">
+                        Learn more
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-6">Test Your Cybersecurity Knowledge</h2>
+            <p class="text-xl text-center text-gray-300 mb-12">Answer these questions to see how cyber-aware you are</p>
+            
+            <div class="max-w-3xl mx-auto bg-gray-800 rounded-xl shadow-xl overflow-hidden">
+                <div class="bg-blue-600 h-2 w-full">
+                    <div id="quizProgress" class="progress-fill bg-blue-400 h-2" style="width: 0%"></div>
+                </div>
+                
+                <div id="quizContainer" class="p-8">
+                    <!-- Quiz will be injected here by JavaScript -->
+                </div>
+                
+                <div id="quizResults" class="p-8 hidden">
+                    <h3 class="text-2xl font-bold mb-6">Your Results</h3>
+                    <div class="text-center mb-8">
+                        <div class="inline-block bg-blue-600 rounded-full p-8 shadow-lg">
+                            <span id="quizScore" class="text-5xl font-bold">0</span> / <span id="quizTotal" class="text-2xl">0</span>
+                        </div>
+                    </div>
+                    <div id="quizFeedback" class="text-gray-300 mb-8">
+                        <!-- Feedback will be injected here -->
+                    </div>
+                    <button id="tryAgainBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium w-full transition">
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hacker Simulation Section -->
+    <section id="simulation" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-6">See How Hackers Operate</h2>
+            <p class="text-xl text-center text-gray-300 mb-12">Interactive demonstration of common attack techniques</p>
+            
+            <div class="flex flex-col lg:flex-row gap-8 items-center">
+                <div class="lg:w-1/2">
+                    <div class="hacker-terminal p-6 rounded-lg h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                            <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                        </div>
+                        <div class="terminal-content overflow-hidden h-96" id="hackerTerminal">
+                            <div class="terminal-line">> Attacker console initialized</div>
+                            <div class="terminal-line">> Scanning network...</div>
+                            <div class="terminal-line">> Select an attack type to begin simulation</div>
+                            <div class="terminal-line"> </div>
+                            <div class="terminal-line">> Ready</div>
+                            <div class="terminal-line">> <span class="terminal-cursor">_</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="simulation-btn bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-lg transition flex items-center" data-attack="phish">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Phishing Attack
+                        </button>
+                        <button class="simulation-btn bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-lg transition flex items-center" data-attack="malware">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Malware Attack
+                        </button>
+                        <button class="simulation-btn bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-4 rounded-lg transition flex items-center" data-attack="ddos">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            DDoS Attack
+                        </button>
+                        <button class="simulation-btn bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg transition flex items-center" data-attack="password">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            Password Cracking
+                        </button>
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-gray-800 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4">Defensive Measures</h3>
+                        <div id="defenseTips" class="text-gray-300 space-y-3">
+                            <p class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="flex-1">Always verify sender email addresses before clicking links</span>
+                            </p>
+                            <p class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="flex-1">Use unique, strong passwords for each account</span>
+                            </p>
+                            <p class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="flex-1">Keep all software updated with the latest security patches</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section id="stats" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-6">Cybersecurity in Numbers</h2>
+            <p class="text-xl text-center text-gray-300 mb-12">Understanding the scale of digital threats today</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Stat 1 -->
+                <div class="bg-gray-800 rounded-xl p-8 text-center">
+                    <div class="text-5xl font-bold text-blue-400 mb-4">93%</div>
+                    <p class="text-gray-300">of organizations experienced at least one cyber attack in 2022</p>
+                </div>
+                
+                <!-- Stat 2 -->
+                <div class="bg-gray-800 rounded-xl p-8 text-center">
+                    <div class="text-5xl font-bold text-blue-400 mb-4">43%</div>
+                    <p class="text-gray-300">of cyber attacks target small businesses with weak security</p>
+                </div>
+                
+                <!-- Stat 3 -->
+                <div class="bg-gray-800 rounded-xl p-8 text-center">
+                    <div class="text-5xl font-bold text-blue-400 mb-4">$4.35M</div>
+                    <p class="text-gray-300">average cost of a data breach globally in 2022</p>
+                </div>
+                
+                <!-- Stat 4 -->
+                <div class="bg-gray-800 rounded-xl p-8 text-center">
+                    <div class="text-5xl font-bold text-blue-400 mb-4">85%</div>
+                    <p class="text-gray-300">of breaches involve human error or interaction</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 max-w-4xl mx-auto">
+                <canvas id="attackTrendsChart" class="w-full h-64"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-2xl font-bold text-blue-400 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        CyberSafe
+                    </div>
+                    <p class="text-gray-400 mt-2">Empowering digital safety through education</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.066 9.645c.183 4.04-2.83 8.544-8.164 8.544-1.622 0-3.131-.476-4.402-1.291 1.524.18 3.045-.244 4.252-1.189-1.256-.023-2.317-.854-2.684-1.995.451.086.895.061 1.298-.049-1.381-.278-2.335-1.522-2.304-2.853.388.215.83.344 1.301.359-1.279-.855-1.641-2.544-.889-3.835 1.416 1.738 3.533 2.881 5.92 3.001-.419-1.796.944-3.527 2.799-3.527.825 0 1.572.349 2.096.907.654-.128 1.27-.368 1.824-.697-.215.671-.67 1.233-1.263 1.589.581-.07 1.135-.224 1.649-.453-.384.578-.87 1.084-1.433 1.489z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between">
+                <p class="text-gray-400 mb-4 md:mb-0">© 2023 CyberSafe. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Matrix background animation
+        const matrixCanvas = document.getElementById('matrixCanvas');
+        const ctx = matrixCanvas.getContext('2d');
+        
+        matrixCanvas.width = matrixCanvas.offsetWidth;
+        matrixCanvas.height = matrixCanvas.offsetHeight;
+        
+        const chars = "01";
+        const fontSize = 14;
+        const columns = matrixCanvas.width / fontSize;
+        
+        const drops = [];
+        for(let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+            
+            ctx.fillStyle = '#00ff00';
+            ctx.font = fontSize + 'px monospace';
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+        }
+        
+        setInterval(drawMatrix, 33);
+        
+        // Quiz functionality
+        const quizData = [
+            {
+                question: "What is the most common method used in phishing attacks?",
+                options: [
+                    "Phone calls",
+                    "Fake emails pretending to be from trusted sources",
+                    "In-person impersonation",
+                    "Social media direct messages"
+                ],
+                answer: 1,
+                explanation: "Phishing most commonly uses deceptive emails that appear to come from legitimate sources like banks or popular websites, tricking users into revealing sensitive information."
+            },
+            {
+                question: "Which of these is NOT a characteristic of a strong password?",
+                options: [
+                    "Contains personal information like your birthday",
+                    "At least 12 characters long",
+                    "Includes numbers, symbols, and mixed case letters",
+                    "Unique for each account"
+                ],
+                answer: 0,
+                explanation: "Personal information should never be used in passwords as it can be easily guessed or found through social media."
+            },
+            {
+                question: "What should you do if you receive an email from your bank asking you to click a link to verify your account?",
+                options: [
+                    "Click the link and log in to verify your account",
+                    "Forward the email to your bank's fraud department",
+                    "Reply to the email with your account details",
+                    "Forward it to friends so they can verify too"
+                ],
+                answer: 1,
+                explanation: "Legitimate banks never ask customers to verify accounts via email links. Always contact the bank directly using a verified phone number or website URL."
+            },
+            {
+                question: "What does two-factor authentication (2FA) provide?",
+                options: [
+                    "An extra layer of security beyond just a password",
+                    "Complete protection from all cyber threats",
+                    "A way to recover your password when forgotten",
+                    "Automatic detection of phishing attempts"
+                ],
+                answer: 0,
+                explanation: "2FA adds an additional verification step (like a text message code) that makes it much harder for attackers to access accounts even if they have your password."
+            },
+            {
+                question: "Which action could make you most vulnerable to a cyber attack on public Wi-Fi?",
+                options: [
+                    "Reading news websites",
+                    "Checking the weather",
+                    "Online banking without a VPN",
+                    "Looking at restaurant menus"
+                ],
+                answer: 2,
+                explanation: "Public Wi-Fi networks are often unsecured, making sensitive activities like banking dangerous without encryption provided by a VPN."
+            }
+        ];
+        
+        let currentQuestion = 0;
+        let score = 0;
+        
+        function loadQuestion() {
+            document.getElementById('quizProgress').style.width = `${(currentQuestion / quizData.length) * 100}%`;
+            
+            const question = quizData[currentQuestion];
+            const quizContainer = document.getElementById('quizContainer');
+            
+            quizContainer.innerHTML = `
+                <h3 class="text-2xl font-bold mb-6">Question ${currentQuestion + 1} of ${quizData.length}</h3>
+                <p class="text-xl mb-8">${question.question}</p>
+                
+                <div class="space-y-4">
+                    ${question.options.map((option, index) => `
+                        <button class="quiz-option w-full text-left p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition flex items-center" data-option="${index}">
+                            <span class="flex items-center justify-center w-6 h-6 rounded-full border border-blue-400 mr-4">${index + 1}</span>
+                            <span>${option}</span>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.querySelectorAll('.quiz-option').forEach(button => {
+                button.addEventListener('click', () => {
+                    const selectedOption = parseInt(button.getAttribute('data-option'));
+                    if(selectedOption === question.answer) {
+                        score++;
+                        button.classList.add('bg-green-900', 'text-green-300');
+                    } else {
+                        button.classList.add('bg-red-900', 'text-red-300');
+                        document.querySelector(`[data-option="${question.answer}"]`).classList.add('bg-green-900', 'text-green-300');
+                    }
+                    
+                    setTimeout(() => {
+                        currentQuestion++;
+                        if(currentQuestion < quizData.length) {
+                            loadQuestion();
+                        } else {
+                            showResults();
+                        }
+                    }, 1500);
+                });
+            });
+        }
+        
+        function showResults() {
+            const quizContainer = document.getElementById('quizContainer');
+            const quizResults = document.getElementById('quizResults');
+            
+            quizContainer.classList.add('hidden');
+            quizResults.classList.remove('hidden');
+            
+            document.getElementById('quizScore').textContent = score;
+            document.getElementById('quizTotal').textContent = quizData.length;
+            
+            const feedback = document.getElementById('quizFeedback');
+            const percentage = Math.round((score / quizData.length) * 100);
+            
+            if(percentage >= 80) {
+                feedback.innerHTML = `
+                    <div class="text-center text-green-400 text-2xl font-bold mb-2">Excellent!</div>
+                    <p class="text-center">You have strong cybersecurity awareness. Keep up the good practices!</p>
+                `;
+            } else if(percentage >= 50) {
+                feedback.innerHTML = `
+                    <div class="text-center text-yellow-400 text-2xl font-bold mb-2">Good start!</div>
+                    <p class="text-center">You know some cybersecurity basics but there's room for improvement. Review the questions and explanations to learn more.</p>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <div class="text-center text-red-400 text-2xl font-bold mb-2">Need improvement</div>
+                    <p class="text-center">Your cybersecurity knowledge needs work. Please go through the learning section to better protect yourself online.</p>
+                `;
+            }
+            
+            // Add detailed feedback for each question
+            feedback.innerHTML += `
+                <div class="mt-8 space-y-6">
+                    ${quizData.map((question, index) => `
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <div class="font-semibold">Q${index + 1}: ${question.question}</div>
+                            <div class="text-sm text-gray-300 mt-2">Correct answer: ${question.options[question.answer]}</div>
+                            <div class="text-sm text-blue-300 mt-1 font-medium">${question.explanation}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.getElementById('tryAgainBtn').addEventListener('click', () => {
+                currentQuestion = 0;
+                score = 0;
+                quizResults.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+                loadQuestion();
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuestion();
+            
+            // Simulation buttons
+            const hackerTerminal = document.getElementById('hackerTerminal');
+            const defenseTips = document.getElementById('defenseTips');
+            
+            const simulationDefenses = {
+                phish: [
+                    "Never click links in unsolicited emails - manually type the website address",
+                    "Check for telltale signs of phishing like poor grammar and mismatched sender addresses",
+                    "Hover over links to see the actual destination URL before clicking"
+                ],
+                malware: [
+                    "Only download software from official, verified sources",
+                    "Keep your antivirus software updated and run regular scans",
+                    "Be cautious with email attachments even from known senders"
+                ],
+                ddos: [
+                    "Use web application firewalls to filter malicious traffic",
+                    "Consider DDoS protection services for critical online services",
+                    "Maintain updated infrastructure with sufficient bandwidth headroom"
+                ],
+                password: [
+                    "Use password managers to create and store strong, unique passwords",
+                    "Enable two-factor authentication wherever available",
+                    "Never reuse passwords across different accounts or services"
+                ]
+            };
+            
+            document.querySelectorAll('.simulation-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const attackType = button.getAttribute('data-attack');
+                    
+                    // Clear terminal
+                    hackerTerminal.innerHTML = `
+                        <div class="terminal-line">> Attack simulation initialized</div>
+                        <div class="terminal-line">> Preparing ${button.textContent.trim()}...</div>
+                    `;
+                    
+                    // Simulate attack
+                    setTimeout(() => {
+                        hackerTerminal.innerHTML += `
+                            <div class="terminal-line">> Scanning for vulnerable targets...</div>
+                        `;
+                        
+                        setTimeout(() => {
+                            hackerTerminal.innerHTML += `
+                                <div class="terminal-line">> Exploiting security weaknesses...</div>
+                            `;
+                            
+                            setTimeout(() => {
+                                hackerTerminal.innerHTML += `
+                                    <div class="terminal-line">> Attack successful! ${Math.floor(Math.random() * 100) + 50} targets compromised</div>
+                                    <div class="terminal-line"> </div>
+                                    <div class="terminal-line">> Ready for next command</div>
+                                    <div class="terminal-line">> <span class="terminal-cursor">_</span></div>
+                                `;
+                                
+                                // Update defense tips
+                                defenseTips.innerHTML = simulationDefenses[attackType].map(tip => `
+                                    <p class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span class="flex-1">${tip}</span>
+                                    </p>
+                                `).join('');
+                            }, 1000);
+                        }, 1000);
+                    }, 1000);
+                });
+            });
+            
+            // Simple chart for statistics section
+            const chartCanvas = document.getElementById('attackTrendsChart');
+            if(chartCanvas) {
+                const ctx = chartCanvas.getContext('2d');
+                chartCanvas.width = chartCanvas.offsetWidth;
+                chartCanvas.height = chartCanvas.offsetHeight;
+                
+                // Simplified chart drawing
+                ctx.fillStyle = 'rgba(0, 150, 255, 0.2)';
+                ctx.fillRect(50, 50, 200, 150);
+                ctx.fillStyle = 'rgba(0, 150, 255, 0.7)';
+                ctx.fillRect(50, 100, 200, 100);
+                
+                ctx.fillStyle = 'white';
+                ctx.font = '12px Arial';
+                ctx.fillText('Cyber Attack Trends', 50, 30);
+                ctx.fillText('2022', 70, 220);
+                ctx.fillText('2023', 170, 220);
+            }
+        });
+    </script>
+</body>
+</html>
+
